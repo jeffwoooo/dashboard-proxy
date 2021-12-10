@@ -1,6 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { map, mapTo, Observable, single, take } from 'rxjs';
+import { map } from 'rxjs';
+import { AxiosRequestConfig } from 'axios';
+import { CacheService } from 'src/cache.service';
 
 /* expected interface */
 export interface ExpectedItem {
@@ -25,25 +27,28 @@ export interface ExpectedTxVolume {
 
 @Injectable()
 export class TxVolumeService {
-  constructor(private httpService: HttpService) {}
+  constructor(private httpService: HttpService, private appService: CacheService) { }
 
-  fetchFCD() {
-    const res = this.httpService.get(
-      'https://fcd.terra.dev/v1/dashboard/tx_volume',
-    );
+  private fetchFCD() {
+    const config: AxiosRequestConfig = {
+      baseURL: 'https://fcd.terra.dev/v1/dashboard'
+    }
 
-    console.log("why???")
+    const path = 'tx_volume';
 
-    return res.pipe(
-      map((r) => r.data),
-      map(this.parseTxVolume),
-    );
+    const res = this.httpService.get(path, config)
+
+    return this.appService.cacheWrap('tx_volume', () => {
+      return res.pipe(
+        map((r) => r.data),
+        map(this.parseTxVolume),
+      );
+    });
   }
 
   getTxVolume(denom: string) {
     return this.fetchFCD().pipe(map(d => d[denom]))
   }
-
 
   private parseTxVolume({
     periodic,
