@@ -1,5 +1,6 @@
 import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { defaultIfEmpty, map } from 'rxjs';
+import { checkResultExist } from 'src/util/check-result-exist';
 import { json } from 'stream/consumers';
 import { TxVolumeService } from './tx-volume.service';
 
@@ -10,24 +11,16 @@ export class TxVolumeController {
   @Get(':denom/periodic')
   getPeriodicData(@Param('denom') denom: string) {
     return this.txVolumeService.getTxVolume(denom).pipe(
-      map((d) => {
-        if (d === undefined) {
-          throw new NotFoundException();
-        }
-        return d.periodic;
-      }),
+      checkResultExist(),
+      map((d) => d.periodic),
     );
   }
 
   @Get(':denom/cumulative')
   getCumulativeData(@Param('denom') denom: string) {
     return this.txVolumeService.getTxVolume(denom).pipe(
-      map((d) => {
-        if (d === undefined) {
-          throw new NotFoundException();
-        }
-        return d.cumulative;
-      }),
+      checkResultExist(),
+      map((d) => d.cumulative),
     );
   }
 }

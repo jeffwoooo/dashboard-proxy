@@ -1,5 +1,6 @@
 import { Controller, Get, NotFoundException } from '@nestjs/common';
 import { map } from 'rxjs';
+import { checkResultExist } from 'src/util/check-result-exist';
 import { AccountsService } from './accounts.service';
 
 @Controller('accounts')
@@ -9,48 +10,32 @@ export class AccountsController {
   @Get('total/periodic')
   getTotalPeriodicData() {
     return this.accountsService.getAccounts().pipe(
-      map((d) => {
-        if (d === undefined) {
-          throw new NotFoundException();
-        }
-        return d.total.periodic;
-      }),
+      checkResultExist(),
+      map((d) => d.total.periodic),
     );
   }
 
   @Get('total/cumulative')
   getTotalCumulativeData() {
     return this.accountsService.getAccounts().pipe(
-      map((d) => {
-        if (d === undefined) {
-          throw new NotFoundException();
-        }
-        return d.total.cumulative;
-      }),
+      checkResultExist(),
+      map((d) => d.total.cumulative),
     );
   }
 
   @Get('active/periodic')
   getActivePeriodicData() {
     return this.accountsService.getAccounts().pipe(
-      map((d) => {
-        if (d === undefined) {
-          throw new NotFoundException();
-        }
-        return d.active.periodic;
-      }),
+      checkResultExist(),
+      map((d) => d.active.periodic),
     );
   }
 
   @Get('active/cumulative')
   getActiveCumulativeData() {
     return this.accountsService.getAccounts().pipe(
-      map((d) => {
-        if (d === undefined) {
-          throw new NotFoundException();
-        }
-        return d.active.cumulative;
-      }),
+      checkResultExist(),
+      map((d) => d.active.cumulative),
     );
   }
 }

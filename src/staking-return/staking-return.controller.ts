@@ -1,5 +1,6 @@
 import { Controller, Get, NotFoundException } from '@nestjs/common';
 import { map } from 'rxjs';
+import { checkResultExist } from 'src/util/check-result-exist';
 import { StakingReturnService } from './staking-return.service';
 
 @Controller('staking-return')
@@ -9,24 +10,16 @@ export class StakingReturnController {
   @Get('annualized')
   getAnnualizedData() {
     return this.stakingReturnService.getStakingReturn().pipe(
-      map((d) => {
-        if (d === undefined) {
-          throw new NotFoundException();
-        }
-        return d.annualized;
-      }),
+      checkResultExist(),
+      map((d) => d.annualized),
     );
   }
 
   @Get('daily')
   getDailyData() {
     return this.stakingReturnService.getStakingReturn().pipe(
-      map((d) => {
-        if (d === undefined) {
-          throw new NotFoundException();
-        }
-        return d.daily;
-      }),
+      checkResultExist(),
+      map((d) => d.daily),
     );
   }
 }
