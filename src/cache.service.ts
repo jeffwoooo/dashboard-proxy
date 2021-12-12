@@ -6,7 +6,7 @@ import { from, mergeMap, Observable, of, tap } from 'rxjs';
 export class CacheService {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) { }
 
-  cacheWrap<T>(cacheKey: string, builder: () => Observable<T>) {
+  cacheWrap<T>(cacheKey: string, builder: () => Observable<T>) : Observable<T> {
     const cacheFetching = from(this.cacheManager.get<T>(cacheKey));
 
     return cacheFetching.pipe(mergeMap(cache => {

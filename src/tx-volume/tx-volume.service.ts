@@ -4,18 +4,6 @@ import { map } from 'rxjs';
 import { AxiosRequestConfig } from 'axios';
 import { CacheService } from 'src/cache.service';
 
-/* expected interface */
-export interface ExpectedItem {
-  datetime: number;
-  value: string;
-}
-
-/* TxVolume: Received → Expected */
-interface ReceivedDatum {
-  datetime: number;
-  txVolume: string;
-}
-
 interface ReceivedTxVolume {
   periodic: { denom: string; data: ReceivedDatum[] }[];
   cumulative: { denom: string; data: ReceivedDatum[] }[];
@@ -27,16 +15,19 @@ export interface ExpectedTxVolume {
 
 @Injectable()
 export class TxVolumeService {
-  constructor(private httpService: HttpService, private appService: CacheService) { }
+  constructor(
+    private httpService: HttpService,
+    private appService: CacheService,
+  ) {}
 
   private fetchFCD() {
     const config: AxiosRequestConfig = {
-      baseURL: 'https://fcd.terra.dev/v1/dashboard'
-    }
+      baseURL: 'https://fcd.terra.dev/v1/dashboard',
+    };
 
     const path = 'tx_volume';
 
-    const res = this.httpService.get(path, config)
+    const res = this.httpService.get(path, config);
 
     return this.appService.cacheWrap('tx_volume', () => {
       return res.pipe(
@@ -47,7 +38,7 @@ export class TxVolumeService {
   }
 
   getTxVolume(denom: string) {
-    return this.fetchFCD().pipe(map(d => d[denom]))
+    return this.fetchFCD().pipe(map((d) => d[denom]));
   }
 
   private parseTxVolume({
