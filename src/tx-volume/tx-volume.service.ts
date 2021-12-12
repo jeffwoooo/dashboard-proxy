@@ -21,15 +21,11 @@ export class TxVolumeService {
   ) {}
 
   private fetchFCD() {
-    const config: AxiosRequestConfig = {
-      baseURL: 'https://fcd.terra.dev/v1/dashboard',
-    };
-
     const path = 'tx_volume';
 
-    const res = this.httpService.get(path, config);
+    const res = this.httpService.get(path);
 
-    return this.appService.cacheWrap('tx_volume', () => {
+    return this.appService.cacheWrap(path, () => {
       return res.pipe(
         map((r) => r.data),
         map(this.parseTxVolume),
