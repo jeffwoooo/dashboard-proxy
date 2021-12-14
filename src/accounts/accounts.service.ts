@@ -1,7 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { map, Observable, zip } from 'rxjs';
-import { CacheService } from 'src/cache.service';
 
 /* Accounts: Received → Expected */
 interface ReceivedAccountItem {
@@ -33,26 +32,20 @@ export interface ExpectedAccounts {
 
 @Injectable()
 export class AccountsService {
-  constructor(
-    private httpService: HttpService,
-    private appService: CacheService,
-  ) {}
+  constructor(private httpService: HttpService) {}
 
   private fetchFCD() {
     const activeAccountsPath = 'active_accounts';
     const registeredAccountsPath = 'registered_accounts';
-    const cacheKey = 'accounts';
 
     const res = zip(
       this.httpService.get(activeAccountsPath).pipe(map((r) => r.data)),
       this.httpService.get(registeredAccountsPath).pipe(map((r) => r.data)),
     );
 
-    return this.appService.cacheWrap(cacheKey, () => {
-      return res.pipe(
-        map(([active, registered]) => this.parseAccounts(active, registered)),
-      );
-    });
+    return res.pipe(
+      map(([active, registered]) => this.parseAccounts(active, registered)),
+    );
   }
 
   getAccounts() {

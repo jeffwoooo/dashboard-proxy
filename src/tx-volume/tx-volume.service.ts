@@ -1,8 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { map } from 'rxjs';
-import { AxiosRequestConfig } from 'axios';
-import { CacheService } from 'src/cache.service';
 
 interface ReceivedTxVolume {
   periodic: { denom: string; data: ReceivedDatum[] }[];
@@ -15,22 +13,17 @@ export interface ExpectedTxVolume {
 
 @Injectable()
 export class TxVolumeService {
-  constructor(
-    private httpService: HttpService,
-    private appService: CacheService,
-  ) {}
+  constructor(private httpService: HttpService) {}
 
   private fetchFCD() {
     const path = 'tx_volume';
 
     const res = this.httpService.get(path);
 
-    return this.appService.cacheWrap(path, () => {
-      return res.pipe(
-        map((r) => r.data),
-        map(this.parseTxVolume),
-      );
-    });
+    return res.pipe(
+      map((r) => r.data),
+      map(this.parseTxVolume),
+    );
   }
 
   getTxVolume(denom: string) {

@@ -1,6 +1,5 @@
 import { HttpModule } from '@nestjs/axios';
-import { CacheModule, Module } from '@nestjs/common';
-import { CacheService } from './cache.service';
+import { Module } from '@nestjs/common';
 import { TxVolumeController } from './tx-volume/tx-volume.controller';
 import { TxVolumeService } from './tx-volume/tx-volume.service';
 import { TaxRewardsController } from './tax-rewards/tax-rewards.controller';
@@ -11,7 +10,7 @@ import { StakingReturnService } from './staking-return/staking-return.service';
 import { StakingReturnController } from './staking-return/staking-return.controller';
 
 @Module({
-  imports: [HttpModule, CacheModule.register({ ttl: undefined })],
+  imports: [HttpModule],
   controllers: [
     TxVolumeController,
     TaxRewardsController,
@@ -19,7 +18,6 @@ import { StakingReturnController } from './staking-return/staking-return.control
     StakingReturnController,
   ],
   providers: [
-    CacheService,
     TxVolumeService,
     TaxRewardsService,
     AccountsService,
