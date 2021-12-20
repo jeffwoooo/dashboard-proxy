@@ -8,10 +8,12 @@ import { WalletsController } from './accounts/accounts.controller';
 import { AccountsService } from './accounts/accounts.service';
 import { StakingReturnService } from './staking-return/staking-return.service';
 import { StakingReturnController } from './staking-return/staking-return.controller';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [HttpModule],
   controllers: [
+    AppController,
     TxVolumeController,
     TaxRewardsController,
     WalletsController,
