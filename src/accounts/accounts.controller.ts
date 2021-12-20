@@ -1,11 +1,11 @@
 import { Controller, Get, NotFoundException } from '@nestjs/common';
 import { map } from 'rxjs';
 import { checkResultExist } from 'src/util/check-result-exist';
-import { AccountsService } from './accounts.service';
+import { AccountsService as WalletsService } from './accounts.service';
 
-@Controller('accounts')
-export class AccountsController {
-  constructor(private accountsService: AccountsService) {}
+@Controller('wallets')
+export class WalletsController {
+  constructor(private accountsService: WalletsService) {}
 
   @Get('total/periodic')
   getTotalPeriodicData() {
