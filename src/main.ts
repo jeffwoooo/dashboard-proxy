@@ -11,6 +11,7 @@ axios.defaults.baseURL = 'https://fcd.terra.dev/v1/dashboard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   app.setGlobalPrefix('chart', {
     exclude: [{ path: 'health', method: RequestMethod.GET }],
   });
