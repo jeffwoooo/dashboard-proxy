@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { map } from 'rxjs';
+import BigNumber from 'bignumber.js';
+import { map, mergeMap, Observable, tap } from 'rxjs';
 
 /* BlockRewards: Received → Expected */
 interface ReceivedBlockRewards {
@@ -28,8 +29,38 @@ export class TaxRewardsService {
     );
   }
 
+  private convertToUST(
+    rewards: ExpectedTaxRewards,
+  ): Observable<ExpectedTaxRewards> {
+    return this.httpService
+      .get('https://lcd.terra.dev/oracle/denoms/exchange_rates')
+      .pipe(
+        map((res) => res.data?.result),
+        map((coins: { denom: string; amount: string }[]) => {
+          const askRate = coins.find((coin) => coin.denom === 'uusd')?.amount;
+          const offerRate = coins.find((coin) => coin.denom === 'ukrw')?.amount;
+          const rate = new BigNumber(askRate).div(offerRate);
+
+          return {
+            cumulative: rewards.cumulative.map((r) => {
+              r.value = new BigNumber(r.value).times(rate).toString();
+              return r;
+            }),
+            periodic: rewards.periodic.map((r) => {
+              r.value = new BigNumber(r.value).times(rate).toString();
+              return r;
+            }),
+          };
+        }),
+      );
+  }
+
   getTaxRewards() {
-    return this.fetchFCD();
+    return this.fetchFCD().pipe(
+      mergeMap((rewards) => {
+        return this.convertToUST(rewards);
+      }),
+    );
   }
 
   private parseBlockRewards = ({
