@@ -33,7 +33,7 @@ export class TaxRewardsService {
     rewards: ExpectedTaxRewards,
   ): Observable<ExpectedTaxRewards> {
     return this.httpService
-      .get('https://lcd.terra.dev/oracle/denoms/exchange_rates')
+      .get(process.env.LCD_URL + '/oracle/denoms/exchange_rates')
       .pipe(
         map((res) => res.data?.result),
         map((coins: { denom: string; amount: string }[]) => {

@@ -7,7 +7,7 @@ import { RequestMethod } from '@nestjs/common';
 // https://mikemcl.github.io/bignumber.js/#exponential-at
 BigNumber.config({ EXPONENTIAL_AT: 1e9 });
 
-axios.defaults.baseURL = 'https://fcd.terra.dev/v1/dashboard';
+axios.defaults.baseURL = process.env.FCD_URL + '/v1/dashboard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

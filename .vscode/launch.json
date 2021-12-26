@@ -11,6 +11,7 @@
             "cwd": "${workspaceFolder}",
             "runtimeExecutable": "yarn",
             "runtimeArgs": ["start:dev"],
+            "envFile": "${workspaceFolder}/.env",
         }
     ]
 }
