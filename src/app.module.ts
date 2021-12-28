@@ -9,6 +9,8 @@ import { AccountsService } from './accounts/accounts.service';
 import { StakingReturnService } from './staking-return/staking-return.service';
 import { StakingReturnController } from './staking-return/staking-return.controller';
 import { AppController } from './app.controller';
+import { PriceController } from './price/price.controller';
+import { PriceService } from './price/price.service';
 
 @Module({
   imports: [HttpModule],
@@ -18,12 +20,14 @@ import { AppController } from './app.controller';
     TaxRewardsController,
     WalletsController,
     StakingReturnController,
+    PriceController,
   ],
   providers: [
     TxVolumeService,
     TaxRewardsService,
     AccountsService,
     StakingReturnService,
+    PriceService,
   ],
 })
 export class AppModule {}

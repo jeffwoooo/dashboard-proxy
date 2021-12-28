@@ -19,7 +19,7 @@ export class TaxRewardsService {
   constructor(private httpService: HttpService) {}
 
   private fetchFCD() {
-    const path = 'block_rewards';
+    const path = 'dashboard/block_rewards';
 
     const res = this.httpService.get(path);
 

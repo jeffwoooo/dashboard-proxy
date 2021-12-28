@@ -22,7 +22,7 @@ export class StakingReturnService {
   constructor(private httpService: HttpService) {}
 
   private fetchFCD() {
-    const path = 'staking_return';
+    const path = 'dashboard/staking_return';
 
     const res = this.httpService.get(path);
 

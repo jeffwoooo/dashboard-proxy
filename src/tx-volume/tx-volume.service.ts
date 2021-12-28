@@ -16,7 +16,7 @@ export class TxVolumeService {
   constructor(private httpService: HttpService) {}
 
   private fetchFCD() {
-    const path = 'tx_volume';
+    const path = 'dashboard/tx_volume';
 
     const res = this.httpService.get(path);
 

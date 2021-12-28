@@ -1,7 +1,6 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
-import { defaultIfEmpty, map } from 'rxjs';
+import { Controller, Get, Param } from '@nestjs/common';
+import { map } from 'rxjs';
 import { checkResultExist } from 'src/util/check-result-exist';
-import { json } from 'stream/consumers';
 import { TxVolumeService } from './tx-volume.service';
 
 @Controller('tx-volume')

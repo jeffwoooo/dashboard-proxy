@@ -35,8 +35,8 @@ export class AccountsService {
   constructor(private httpService: HttpService) {}
 
   private fetchFCD() {
-    const activeAccountsPath = 'active_accounts';
-    const registeredAccountsPath = 'registered_accounts';
+    const activeAccountsPath = 'dashboard/active_accounts';
+    const registeredAccountsPath = 'dashboard/registered_accounts';
 
     const res = zip(
       this.httpService.get(activeAccountsPath).pipe(map((r) => r.data)),
