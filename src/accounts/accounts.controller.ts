@@ -7,7 +7,7 @@ import { AccountsService as WalletsService } from './accounts.service';
 export class WalletsController {
   constructor(private accountsService: WalletsService) {}
 
-  @Get('total/periodic')
+  @Get(['total/periodic', 'new/periodic'])
   getTotalPeriodicData() {
     return this.accountsService.getAccounts().pipe(
       checkResultExist(),
@@ -15,7 +15,7 @@ export class WalletsController {
     );
   }
 
-  @Get('total/cumulative')
+  @Get(['total/cumulative', 'new/cumulative'])
   getTotalCumulativeData() {
     return this.accountsService.getAccounts().pipe(
       checkResultExist(),
