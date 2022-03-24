@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import { format, startOfToday, subDays } from 'date-fns';
 import { map, Observable, zip } from 'rxjs';
 import { Connection } from 'typeorm';
+import * as nodeCron from 'node-cron';
 
 /* Accounts: Received → Expected */
 interface ReceivedAccountItem {
@@ -48,6 +49,12 @@ export class AccountsService {
   constructor(private connection: Connection, private httpService: HttpService) {
     this.fetchActiveAccountSum(activeAccountSumPeriod).catch((err) => {
       console.error(err);
+    });
+
+    nodeCron.schedule('0 20 0 * * *', () => {
+      this.fetchActiveAccountSum(activeAccountSumPeriod).catch((err) => {
+        console.error(err);
+      });
     });
   }
 
