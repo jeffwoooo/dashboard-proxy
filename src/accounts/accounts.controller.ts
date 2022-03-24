@@ -23,6 +23,11 @@ export class WalletsController {
     );
   }
 
+  @Get('active')
+  getActiveData() {
+    return this.accountsService.activeAccounts();
+  }
+
   @Get('active/periodic')
   getActivePeriodicData() {
     return this.accountsService.getAccounts().pipe(

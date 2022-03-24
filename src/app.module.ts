@@ -11,9 +11,21 @@ import { StakingReturnController } from './staking-return/staking-return.control
 import { AppController } from './app.controller';
 import { PriceController } from './price/price.controller';
 import { PriceService } from './price/price.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { getConnectionOptions } from 'typeorm';
+import AccountTxEntity from './accounts/account-tx.entity';
 
 @Module({
-  imports: [HttpModule],
+  imports: [
+    HttpModule,
+    TypeOrmModule.forRootAsync({
+      useFactory: async () =>
+        Object.assign(await getConnectionOptions(), {
+          autoLoadEntities: true,
+        }),
+    }),
+    TypeOrmModule.forFeature([AccountTxEntity]),
+  ],
   controllers: [
     AppController,
     TxVolumeController,
